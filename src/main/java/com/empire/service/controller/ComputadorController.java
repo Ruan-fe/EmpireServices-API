@@ -30,12 +30,13 @@ public class ComputadorController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ComputadorEntity save(@RequestBody ComputadorDTO dto){
-        Integer idLab = dto.getIdLaboratorio();
 
+        Integer idLab = dto.getIdLaboratorio();
         LaboratorioEntity laboratorio = laboratorioRepository
                 .findById(idLab)
                 .orElseThrow(()->
-                        new ResponseStatusException(HttpStatus.BAD_REQUEST,"Lab não encontrada"));
+                        new ResponseStatusException(HttpStatus.BAD_REQUEST,"Lab não encontrado"));
+
         ComputadorEntity computer = new ComputadorEntity();
         computer.setId(dto.getId());
         computer.setDescricao(dto.getDescricao());
