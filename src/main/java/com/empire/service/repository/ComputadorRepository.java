@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface ComputadorRepository extends JpaRepository<ComputadorEntity,Integer> {
 
+ List<ComputadorEntity>findByLaboratorioId(Integer idLaboratorio);
 
 }

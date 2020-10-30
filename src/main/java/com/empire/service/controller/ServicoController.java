@@ -11,6 +11,7 @@ import com.empire.service.repository.LaboratorioRepository;
 import com.empire.service.repository.ServicoRepository;
 import com.empire.service.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -65,9 +66,16 @@ public class ServicoController {
     }
 
     @GetMapping
-    public List<ServicoDTO> listar(){
-        List<ServicoEntity> servicos = servicoRepository.findAll();
-        return ServicoDTO.converter(servicos);
+    public List<ServicoDTO> listar(@RequestParam(required = false) Character status){
+        if(status == null){
+
+            List<ServicoEntity> servicos = servicoRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
+            return ServicoDTO.converter(servicos);
+        }else{
+            List<ServicoEntity> servicos = servicoRepository.findByStatusOrderByIdDesc(status);
+            return ServicoDTO.converter(servicos);
+        }
+
     }
 
 

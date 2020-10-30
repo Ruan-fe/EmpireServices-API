@@ -22,9 +22,14 @@ public class ComputadorController {
     private final LaboratorioRepository laboratorioRepository;
 
     @GetMapping
-    public List<ComputadorDTO> listar(){
-        List<ComputadorEntity> computadores = repository.findAll();
-        return ComputadorDTO.converter(computadores);
+    public List<ComputadorDTO> listar(@RequestParam(required = false) Integer idLaboratorio){
+        if(idLaboratorio == null){
+            List<ComputadorEntity> computadores = repository.findAll();
+            return ComputadorDTO.converter(computadores);
+        }else{
+            List<ComputadorEntity> computadores = repository.findByLaboratorioId(idLaboratorio);
+            return ComputadorDTO.converter(computadores);
+        }
     }
 
     @PostMapping
