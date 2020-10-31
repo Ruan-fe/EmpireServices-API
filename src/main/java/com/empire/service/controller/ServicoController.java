@@ -22,7 +22,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/servicos")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class ServicoController {
     private final ServicoRepository servicoRepository;

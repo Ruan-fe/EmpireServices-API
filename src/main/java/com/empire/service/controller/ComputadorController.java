@@ -7,6 +7,9 @@ import com.empire.service.model.entity.LaboratorioEntity;
 import com.empire.service.repository.ComputadorRepository;
 import com.empire.service.repository.LaboratorioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,16 +18,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/computadores")
-@CrossOrigin("*")
 @RequiredArgsConstructor
 public class ComputadorController {
     private final ComputadorRepository repository;
     private final LaboratorioRepository laboratorioRepository;
 
     @GetMapping
+    @Cacheable(value = "listaComputadores")
     public List<ComputadorDTO> listar(@RequestParam(required = false) Integer idLaboratorio){
         if(idLaboratorio == null){
-            List<ComputadorEntity> computadores = repository.findAll();
+            List<ComputadorEntity> computadores = repository.findAll((Sort.by(Sort.Direction.ASC,"laboratorio")));
             return ComputadorDTO.converter(computadores);
         }else{
             List<ComputadorEntity> computadores = repository.findByLaboratorioId(idLaboratorio);
@@ -34,6 +37,7 @@ public class ComputadorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @CacheEvict(value = "listaComputadores", allEntries = true)
     public ComputadorEntity save(@RequestBody ComputadorDTO dto){
 
         Integer idLab = dto.getIdLaboratorio();
@@ -50,6 +54,7 @@ public class ComputadorController {
     }
 
     @DeleteMapping("{id}")
+    @CacheEvict(value = "listaComputadores", allEntries = true)
     public void excluir(@PathVariable Integer id){
         repository.deleteById(id);
     }

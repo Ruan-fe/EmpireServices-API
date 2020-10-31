@@ -19,5 +19,4 @@ public class LaboratorioEntity {
     private Integer id;
     @NotNull
     private String descricao;
-
 }
