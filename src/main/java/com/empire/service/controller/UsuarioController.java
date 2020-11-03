@@ -8,8 +8,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
@@ -18,7 +16,17 @@ public class UsuarioController {
 
     @GetMapping
     @Cacheable(value = "listaUsuarios")
-    public List<UsuarioEntity> listarTodos(){ return usuarioRepository.findAll(); }
+    public Object listarTodos(@RequestParam(required = false) String email){
+        if(email == null){
+            return usuarioRepository.findAll();
+        }
+        else{
+            return usuarioRepository.findByEmail(email);
+        }
+
+    }
+
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

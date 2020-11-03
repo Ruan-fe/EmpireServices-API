@@ -11,13 +11,14 @@ import com.empire.service.repository.LaboratorioRepository;
 import com.empire.service.repository.ServicoRepository;
 import com.empire.service.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
+import java.time.format.DateTimeFormatter;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,8 @@ public class ServicoController {
         Integer idLab = dto.getIdLaboratorio();
         Integer idComp = dto.getIdComputador();
         Integer idUser = dto.getIdUsuario();
+
+        //LocalDate data = LocalDate.parse(dto.getDataAbertura(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
 
         LaboratorioEntity laboratorio = laboratorioRepository
@@ -67,7 +70,6 @@ public class ServicoController {
     @GetMapping
     public List<ServicoDTO> listar(@RequestParam(required = false) Character status){
         if(status == null){
-
             List<ServicoEntity> servicos = servicoRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
             return ServicoDTO.converter(servicos);
         }else{
